@@ -12,7 +12,7 @@ namespace UniqueEmailService.Models
         private string _rawEmail;
         private const string ACC_MATCH_IGNORE_AFTER = "+";
         private const string ACC_MATCH_IGNORE_CHAR = ".";
-        private const string AT_SYM = "@";
+        private const char AT_SYM = '@';
 
         [EmailAddress]
         [Required]
@@ -36,7 +36,7 @@ namespace UniqueEmailService.Models
                 //Per RFC 1035 3.1, domains must be compared case insensitive, so convert to lower case.
                 //Per RFC 5321 2.4 Mailbox local parts (before @) are case sensitive (despite implementations that ignore this) and so it is dangerous to
                 //  check for uniqueness ignoring case on the entire email address.
-                return RawEmail.Substring(RawEmail.IndexOf('@') + 1).ToLower();
+                return RawEmail.Substring(RawEmail.IndexOf(AT_SYM) + 1).ToLower();
             }
         }
 
@@ -51,7 +51,7 @@ namespace UniqueEmailService.Models
                 localPart = localPart.Split(ACC_MATCH_IGNORE_AFTER).First();
                 localPart = localPart.Replace(ACC_MATCH_IGNORE_CHAR, string.Empty);
 
-                uniqueEmail = localPart + '@' + Domain;
+                uniqueEmail = localPart + AT_SYM + Domain;
             }
             else
             {
